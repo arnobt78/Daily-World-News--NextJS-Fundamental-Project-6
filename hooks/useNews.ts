@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { Article } from "@/types/news";
 import { fetchHeadlinesClient } from "@/lib/api";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface UseNewsParams {
   country?: string;
@@ -15,8 +16,12 @@ export function useNews(
   initialArticles?: Article[],
   params?: UseNewsParams
 ) {
-  const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ["headlines", category, params?.country, params?.lang],
+  const { data, isLoading, error, isFetching, refetch } = useQuery({
+    queryKey: queryKeys.headlines.list(
+      category,
+      params?.country,
+      params?.lang
+    ),
     queryFn: () =>
       fetchHeadlinesClient({
         category,
@@ -40,5 +45,6 @@ export function useNews(
     loading: isLoading,
     error: error instanceof Error ? error.message : error ? "Unknown error" : null,
     isFetching,
+    refetch,
   };
 }

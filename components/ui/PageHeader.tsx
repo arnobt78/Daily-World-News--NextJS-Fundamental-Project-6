@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { RefreshCw, Bookmark } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useRefreshNews } from "@/hooks/useRefreshNews";
+import { useBookmarks } from "@/context/BookmarkContext";
 
 export default function PageHeader() {
+  const { refresh, isRefreshing } = useRefreshNews();
+  const { bookmarkedArticles } = useBookmarks();
+  const hasBookmarks = bookmarkedArticles.length > 0;
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -17,10 +26,32 @@ export default function PageHeader() {
       >
         News App
       </Link>
-      <nav className="flex items-center gap-4 sm:gap-6">
+      <nav className="flex items-center gap-2 sm:gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => refresh()}
+          disabled={isRefreshing}
+          aria-label="Refresh news"
+          className="text-white/80 hover:text-white hover:bg-white/10"
+        >
+          <RefreshCw
+            className={`size-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
+        </Button>
+        <ThemeToggle />
+        {hasBookmarks && (
+          <Link
+            href="/bookmarks"
+            className="flex items-center gap-1.5 font-comfortaa text-sm text-white/80 hover:text-white transition-colors"
+          >
+            <Bookmark className="size-4" />
+            Bookmarks
+          </Link>
+        )}
         <Link
           href="/"
-          className="font-comfortaa text-sm text-white/80 hover:text-white transition-colors"
+          className="font-comfortaa text-sm text-white/80 hover:text-white transition-colors hidden sm:inline"
         >
           Home
         </Link>

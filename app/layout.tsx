@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Kanit, Bebas_Neue, Comfortaa, Syne, Geist } from "next/font/google";
 import "./globals.css";
 import { NewsProvider } from "@/context/NewsContext";
+import { BookmarkProvider } from "@/context/BookmarkContext";
 import { QueryProvider } from "@/components/providers/QueryProvider";
+import { InvalidationProvider } from "@/components/providers/InvalidationProvider";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -45,16 +47,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(kanit.variable, bebasNeue.variable, comfortaa.variable, syne.variable, "font-sans", geist.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn(kanit.variable, bebasNeue.variable, comfortaa.variable, syne.variable, "font-sans", geist.variable)}>
       <head>
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         />
       </head>
-      <body className="font-kanit antialiased">
+      <body className="font-kanit antialiased" suppressHydrationWarning>
         <QueryProvider>
-          <NewsProvider>{children}</NewsProvider>
+          <InvalidationProvider>
+            <BookmarkProvider>
+              <NewsProvider>{children}</NewsProvider>
+            </BookmarkProvider>
+          </InvalidationProvider>
         </QueryProvider>
       </body>
     </html>

@@ -7,6 +7,7 @@ import ArticleCard from "@/components/ui/ArticleCard";
 import PageHeader from "@/components/ui/PageHeader";
 import NewsModal from "@/components/NewsModal";
 import FilterBar from "@/components/ui/FilterBar";
+import SearchResultsSkeleton from "@/components/ui/SearchResultsSkeleton";
 import { useSearch } from "@/hooks/useSearch";
 import { useNewsContext } from "@/context/NewsContext";
 import type { Article } from "@/types/news";
@@ -50,11 +51,7 @@ export default function SearchPage() {
               {error}
             </div>
           )}
-          {loading && query && (
-            <div className="py-12 text-center text-white/80 font-comfortaa">
-              Loading...
-            </div>
-          )}
+          {loading && query && <SearchResultsSkeleton />}
           {!loading && query && !error && (
             <p className="font-comfortaa text-white/70 mb-6">
               {totalArticles > 0

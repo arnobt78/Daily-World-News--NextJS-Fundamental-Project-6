@@ -12,6 +12,7 @@ import NewsModal from "./NewsModal";
 import PageHeader from "./ui/PageHeader";
 import AnimatedSection from "./ui/AnimatedSection";
 import FilterBar from "./ui/FilterBar";
+import NewsGridSkeleton from "./ui/NewsGridSkeleton";
 
 interface NewsSectionProps {
   initialArticles: Article[];
@@ -67,10 +68,11 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
                   Check GNEWS_API_KEY in Vercel env vars.
                 </p>
               </div>
-            ) : loading ? (
-              <div className="flex items-center justify-center h-64 text-[#ddd] font-comfortaa">
-                Loading...
-              </div>
+            ) : loading && !headline && news.length === 0 ? (
+              <>
+                <NewsGridSkeleton isHeadline />
+                <NewsGridSkeleton count={6} />
+              </>
             ) : (
               <>
                 {headline && (

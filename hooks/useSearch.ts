@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSearchClient } from "@/lib/api";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface UseSearchParams {
   lang?: string;
@@ -15,7 +16,12 @@ export function useSearch(query: string, params?: UseSearchParams) {
   const [page, setPageState] = useState(1);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["search", query.trim(), page, params?.lang, params?.country],
+    queryKey: queryKeys.search.list(
+      query.trim(),
+      page,
+      params?.country,
+      params?.lang
+    ),
     queryFn: () =>
       fetchSearchClient({
         q: query.trim(),

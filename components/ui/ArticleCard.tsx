@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Bookmark } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useBookmarks } from "@/context/BookmarkContext";
 import type { Article } from "@/types/news";
 
 const NO_IMG = "/images/no-img.png";
@@ -18,6 +21,9 @@ export default function ArticleCard({
   index = 0,
   isHeadline = false,
 }: ArticleCardProps) {
+  const { toggleBookmark, isBookmarked } = useBookmarks();
+  const saved = isBookmarked(article.url);
+
   return (
     <motion.button
       type="button"
@@ -39,6 +45,19 @@ export default function ArticleCard({
         alt={article.title}
         className="w-full h-full object-cover rounded-xl opacity-50 group-hover:opacity-60 transition-opacity duration-300"
       />
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleBookmark(article.url, article);
+        }}
+        className="absolute top-3 right-3 p-1.5 rounded-lg bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-colors z-10"
+        aria-label={saved ? "Remove bookmark" : "Bookmark"}
+      >
+        <Bookmark
+          className={`size-4 ${saved ? "fill-current text-[#b88efc]" : ""}`}
+        />
+      </button>
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent rounded-xl" />
       <div className="absolute left-0 bottom-0 w-full p-4 pr-12 rounded-b-xl">
         <h3
@@ -49,9 +68,12 @@ export default function ArticleCard({
           {article.title}
         </h3>
         {!isHeadline && article.source?.name && (
-          <p className="font-comfortaa text-xs text-white/80 mt-1">
+          <Badge
+            variant="secondary"
+            className="mt-1 bg-black/50 text-white/90 border-0 text-[10px]"
+          >
             {article.source.name}
-          </p>
+          </Badge>
         )}
       </div>
     </motion.button>

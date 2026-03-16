@@ -7,8 +7,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import type { CountryCode } from "@/data/countries";
 import type { LangCode } from "@/data/languages";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface NewsFilters {
   country: CountryCode | "";
@@ -29,15 +31,20 @@ const defaultFilters: NewsFilters = {
 const NewsContext = createContext<NewsContextValue | null>(null);
 
 export function NewsProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
   const [filters, setFilters] = useState<NewsFilters>(defaultFilters);
 
   const setCountry = useCallback((country: CountryCode | "") => {
     setFilters((prev) => ({ ...prev, country }));
-  }, []);
+    queryClient.invalidateQueries({ queryKey: queryKeys.headlines.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+  }, [queryClient]);
 
   const setLang = useCallback((lang: LangCode | "") => {
     setFilters((prev) => ({ ...prev, lang }));
-  }, []);
+    queryClient.invalidateQueries({ queryKey: queryKeys.headlines.all });
+    queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
+  }, [queryClient]);
 
   return (
     <NewsContext.Provider value={{ filters, setCountry, setLang }}>
