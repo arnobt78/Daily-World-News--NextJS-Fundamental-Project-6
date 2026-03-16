@@ -1,0 +1,9 @@
+{
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/((?!_next|api|favicon\\.ico|images).*)",
+      "destination": "/"
+    }
+  ]
+}

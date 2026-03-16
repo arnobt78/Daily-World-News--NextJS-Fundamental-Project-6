@@ -1,16 +1,8 @@
-# Daily World News -Next.js, React, TypeScript, GNews API, TailwindCSS, Shadcn, Axios Fundamental Project 6
+# Daily World News - Next.js 15, React 19, TypeScript, GNews API, Tailwind CSS
 
-News App is a React-Vite Random Current World Related Live News project, using GNews API, Axios for the HTTP Client Request, display the News in different Category in Navbar, display the details in a Popup page, Read more as Source Link and deploy on Vercel.
+News App is a Next.js 15 project displaying live world news from the GNews API. Features server-side rendering for initial load, client-side category switching, modal article details, and Tailwind CSS styling. Deploy on Vercel.
 
 - **Live Demo:** [https://daily-world-news.vercel.app/](https://daily-world-news.vercel.app/)
-
-## Project Summary
-
-A modern news web application built with React and Vite, providing live, real-time world news powered by the GNews API. Designed for rapid development and learning, this project demonstrates best practices in React, state management, API integration, and frontend tooling. The application features categorized news, a responsive layout, and showcases integration with third-party APIs using Axios.
-
-- **Live-Demo:** <https://news-arnob.vercel.app/>
-
----
 
 ## Table of Contents
 
@@ -29,11 +21,10 @@ A modern news web application built with React and Vite, providing live, real-ti
 
 ## Project Details
 
-- **Live Demo:** [News-ReactVite Webpage](https://news-arnob.vercel.app/)
 - **Purpose:** Deliver the latest world news in a fast, organized, and visually engaging way.
 - **API Source:** [GNews API](https://gnews.io/docs/v4#authentication)
-- **Frontend:** Built with React & Vite for blazing fast development and HMR (Hot Module Replacement).
-- **HTTP Requests:** Managed through Axios.
+- **Frontend:** Next.js 15 with React 19, TypeScript, and Tailwind CSS.
+- **Data Fetching:** Server-side for initial load; client-side via API route for category switching.
 
 ---
 
@@ -43,7 +34,7 @@ A modern news web application built with React and Vite, providing live, real-ti
 - Categorized news navigation via Navbar (e.g., World, Sports, Technology, etc.).
 - Detailed news view for each article.
 - Responsive design for desktop and mobile.
-- Secure API key management using `.env`.
+- Secure API key management using `GNEWS_API_KEY` in `.env`.
 - Clean code structure and reusable components.
 - Easily extensible for more features or categories.
 
@@ -51,42 +42,38 @@ A modern news web application built with React and Vite, providing live, real-ti
 
 ## Project Structure
 
+```bash
+news-world/
+├── app/
+│   ├── api/headlines/route.ts   # GNews proxy API
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx                 # SSR initial news
+├── components/
+│   ├── NewsSection.tsx          # Client - category fetch
+│   ├── NewsModal.tsx
+│   ├── NewsNavbar.tsx
+│   └── NewsGrid.tsx
+├── data/categories.ts
+├── hooks/useNews.ts
+├── lib/gnews.ts
+├── types/news.ts
+├── next.config.ts
+├── tailwind.config.ts
+└── package.json
 ```
-News--ReactVite/
-├── .eslintrc.cjs
-├── .gitignore
-├── README.md
-├── index.html
-├── package.json
-├── package-lock.json
-├── vite.config.js
-└── src/
-    ├── components/
-    │   ├── Navbar.jsx
-    │   ├── NewsList.jsx
-    │   ├── NewsItem.jsx
-    │   └── ...otherComponents
-    ├── App.jsx
-    ├── main.jsx
-    └── assets/
-        └── ...images, styles
-```
-
-> _Note: The `src` folder contains all source code, while `components` hold reusable UI elements._
 
 ---
 
 ## Technology Stack
 
-- **React**: Core UI library.
-- **Vite**: Fast build tool and dev server.
-- **Axios**: For HTTP requests.
-- **JavaScript (ES6+)**
-- **CSS / SCSS**: For styling.
+- **Next.js 15**: React framework with App Router.
+- **React 19**: Core UI library.
+- **TypeScript**: Type safety.
+- **Tailwind CSS**: Utility-first styling.
 - **GNews API**: News data provider.
-- **Node.js & npm**: Dependency and build management.
 - **ESLint**: Linting and code quality.
-- **Vercel**: (optional) for deployment.
+- **Vercel**: Deployment.
 
 ---
 
@@ -109,26 +96,24 @@ News--ReactVite/
    ```
 
 4. **Setup .env File**  
-   Create a `.env` file in the root, and add your GNews API key:
-
-   ```
-   VITE_NEWS_API_KEY=your_gnews_api_key_here
-   ```
-
-5. **Install Axios**  
-   If not already installed:
+   Copy `.env.example` to `.env` and add your GNews API key:
 
    ```bash
-   npm install axios
+   cp .env.example .env
    ```
 
-6. **Run the Application Locally**
+   Edit `.env`:
+   ```
+   GNEWS_API_KEY=your_gnews_api_key_here
+   ```
+
+5. **Run the Application Locally**
 
    ```bash
    npm run dev
    ```
 
-   Open [http://localhost:5173/](http://localhost:5173/) in your browser.
+   Open [http://localhost:3000/](http://localhost:3000/) in your browser.
 
 ---
 
@@ -136,8 +121,8 @@ News--ReactVite/
 
 - **GNews API**:
   - Sign up at [gnews.io](https://gnews.io/docs/v4#authentication) to get your API key.
-  - Store the API key in your `.env` file as shown above.
-  - Axios is used to fetch news data from the API endpoints.
+  - Store the API key in `.env` as `GNEWS_API_KEY`.
+  - The `/api/headlines` route proxies requests to GNews (key stays server-side).
 
 ---
 
@@ -152,10 +137,10 @@ News--ReactVite/
 
 ## Key Concepts & Learning Points
 
-- **React Functional Components**: All UI built from modular, reusable JS functions.
-- **State Management**: Use of React Hooks (useState, useEffect) for local state and effects.
-- **API Requests with Axios**: Fetch and handle data asynchronously.
-- **Environment Variables**: Secure API keys with `.env` and Vite’s environment system.
+- **Next.js App Router**: Server and client components, API routes.
+- **State Management**: React Hooks and custom `useNews` hook.
+- **Data Fetching**: Server-side for initial load; client-side via `/api/headlines` for categories.
+- **Environment Variables**: `GNEWS_API_KEY` in `.env` (server-side only).
 - **Component-Based Architecture**: Separation of concerns, reusability, and scalability.
 - **Routing (if implemented)**: Page navigation and dynamic rendering.
 - **Responsive Design**: Mobile-first, adaptive layout.
@@ -164,38 +149,32 @@ News--ReactVite/
 
 ## Example Code Snippets
 
-**Fetching News with Axios:**
+**Fetching News (lib/gnews.ts):**
 
-```javascript
-import axios from "axios";
+```typescript
+import { fetchHeadlines } from "@/lib/gnews";
 
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-const url = `https://gnews.io/api/v4/top-headlines?token=${API_KEY}&lang=en`;
-
-const fetchNews = async () => {
-  try {
-    const response = await axios.get(url);
-    // set state with response.data.articles
-  } catch (error) {
-    console.error("Failed to fetch news:", error);
-  }
-};
+const data = await fetchHeadlines("general");
+// data.articles
 ```
 
 ---
 
 **Sample Navbar Component:**
 
-```jsx
-export default function Navbar() {
+```tsx
+"use client";
+
+import { categories } from "@/data/categories";
+
+export default function NewsNavbar({ onCategoryClick }) {
   return (
     <nav>
-      <ul>
-        <li>World</li>
-        <li>Technology</li>
-        <li>Sports</li>
-        {/* Add more categories */}
-      </ul>
+      {categories.map((cat) => (
+        <button key={cat} onClick={() => onCategoryClick(cat)}>
+          {cat}
+        </button>
+      ))}
     </nav>
   );
 }
@@ -212,13 +191,13 @@ Contributions, suggestions, and feedback are welcome!
 
 ## Keywords
 
-React, Vite, GNews API, Axios, News App, JavaScript, .env, Environment Variables, API Integration, Responsive Design, Components, Frontend, Web Development, Learning Project
+Next.js 15, React 19, TypeScript, Tailwind CSS, GNews API, News App, SSR, API Routes, Environment Variables, Responsive Design, Components, Frontend, Web Development
 
 ---
 
 ## Happy Coding! 🚀
 
-Thank you for exploring and using News-ReactVite.  
+Thank you for exploring and using News World.  
 _Feel free to fork, star, and contribute!_
 
 ---
