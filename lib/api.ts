@@ -1,7 +1,12 @@
+/**
+ * Client-side API fetchers - Call our Next.js API routes (not GNews directly).
+ * Used by useNews and useSearch hooks. Replaces null images with placeholder.
+ */
 import type { Article, GNewsResponse } from "@/types/news";
 
 const NO_IMG = "/images/no-img.png";
 
+/** Ensures every article has an image URL (fallback to placeholder) */
 function normalizeArticles(articles: Article[]): Article[] {
   return articles.map((a) => ({
     ...a,
@@ -29,6 +34,7 @@ export async function fetchHeadlinesClient(
   if (!res.ok) throw new Error("Failed to fetch headlines");
   const data: GNewsResponse = await res.json();
   const articles = normalizeArticles(data.articles ?? []);
+  /* Split: first article as featured headline, rest as grid */
   return {
     headline: articles[0] ?? null,
     news: articles.slice(1, 10),

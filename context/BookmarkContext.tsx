@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * BookmarkContext - Persists bookmarked articles in localStorage.
+ * Uses useSyncExternalStore for SSR-safe subscription to storage changes.
+ * Toggle adds/removes by URL; article data stored for display on Bookmarks page.
+ */
 import {
   createContext,
   useCallback,
@@ -38,6 +43,7 @@ function toMinimal(article: Article): BookmarkArticle {
   };
 }
 
+/** SSR-safe: returns [] on server */
 function loadFromStorage(): BookmarkArticle[] {
   if (typeof window === "undefined") return [];
   try {
@@ -90,6 +96,7 @@ function getBookmarkSnapshot(): BookmarkArticle[] {
 }
 
 export function BookmarkProvider({ children }: { children: ReactNode }) {
+  /* useSyncExternalStore: subscribe to storage, get snapshot, server fallback */
   const bookmarkedArticles = useSyncExternalStore(
     subscribeBookmarks,
     getBookmarkSnapshot,

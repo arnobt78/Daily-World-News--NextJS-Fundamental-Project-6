@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * useRefreshNews - Manual refresh of headlines and search.
+ * Invalidates React Query cache and refetches. Ensures spinner shows
+ * at least 500ms for better UX feedback.
+ */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { invalidateAllNews } from "@/lib/invalidateNews";
 import { queryKeys } from "@/lib/queryKeys";
@@ -16,6 +21,7 @@ export function useRefreshNews() {
       await queryClient.refetchQueries({ queryKey: queryKeys.headlines.all });
       await queryClient.refetchQueries({ queryKey: queryKeys.search.all });
       const elapsed = Date.now() - start;
+      /* Minimum spin duration so user sees feedback */
       if (elapsed < MIN_SPIN_DURATION_MS) {
         await new Promise((r) =>
           setTimeout(r, MIN_SPIN_DURATION_MS - elapsed)

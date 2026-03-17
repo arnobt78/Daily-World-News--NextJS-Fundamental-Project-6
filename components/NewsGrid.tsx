@@ -1,6 +1,9 @@
 "use client";
 
-/** Grid of article cards; receives articles from parent */
+/**
+ * NewsGrid - Renders articles as a grid of ArticleCards.
+ * isHeadline=true: single large card; else 2-column grid (1 on mobile).
+ */
 import type { Article } from "@/types/news";
 import ArticleCard from "./ui/ArticleCard";
 
@@ -15,6 +18,7 @@ export default function NewsGrid({
   onArticleClick,
   isHeadline = false,
 }: NewsGridProps) {
+  /* Featured headline: one large card */
   if (isHeadline && articles.length > 0) {
     return (
       <ArticleCard

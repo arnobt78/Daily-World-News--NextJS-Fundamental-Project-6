@@ -1,3 +1,8 @@
+/**
+ * News types - Match GNews API response shape.
+ * Used across API routes, hooks, and components.
+ */
+
 /** GNews API source object */
 export interface ArticleSource {
   id?: string;

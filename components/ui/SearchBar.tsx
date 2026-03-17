@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * SearchBar - Debounced search input. Calls onSearch after debounceMs of no typing.
+ * Reduces API calls when user types quickly. Focus state for border/scale animation.
+ */
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 
@@ -23,7 +27,7 @@ export default function SearchBar({
 
   useEffect(() => {
     const timer = setTimeout(debouncedSearch, debounceMs);
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); /* Cancel if query changes before debounce */
   }, [query, debounceMs, debouncedSearch]);
 
   return (

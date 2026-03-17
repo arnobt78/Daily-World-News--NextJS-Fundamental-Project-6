@@ -1,4 +1,7 @@
-/** GNews API category values for top-headlines */
+/**
+ * GNews API category values for top-headlines endpoint.
+ * Must match GNews docs: general, world, business, technology, etc.
+ */
 export const categories = [
   "general",
   "world",

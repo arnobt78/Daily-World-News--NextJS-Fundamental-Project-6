@@ -1,3 +1,8 @@
+/**
+ * GNews API client - Server-side only.
+ * Used by API routes and SSR. Never call from client (exposes API key).
+ * Docs: https://gnews.io/docs/v4
+ */
 import type {
   GNewsResponse,
   HeadlinesParams,
@@ -7,6 +12,7 @@ import type {
 const GNEWS_HEADLINES = "https://gnews.io/api/v4/top-headlines";
 const GNEWS_SEARCH = "https://gnews.io/api/v4/search";
 
+/** Reads API key from env; throws if missing */
 function getApiKey(): string {
   const apiKey = process.env.GNEWS_API_KEY;
   if (!apiKey) {
@@ -45,7 +51,7 @@ export async function fetchHeadlines(
   });
 
   const res = await fetch(url, {
-    next: { revalidate: 300 },
+    next: { revalidate: 300 }, /* Cache for 5 min in Next.js data cache */
   });
 
   if (!res.ok) {
@@ -55,7 +61,7 @@ export async function fetchHeadlines(
   return res.json();
 }
 
-/** Server-side fetch for GNews search endpoint */
+/** Server-side fetch for GNews search endpoint; requires q param */
 export async function fetchSearch(
   params: SearchParams
 ): Promise<GNewsResponse> {

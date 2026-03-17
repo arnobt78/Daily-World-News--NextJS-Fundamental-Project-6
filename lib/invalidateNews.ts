@@ -1,3 +1,7 @@
+/**
+ * Invalidation helpers - mark queries stale so React Query refetches.
+ * Used by refresh button and NewsContext filter changes.
+ */
 import { queryClient } from "@/lib/queryClient";
 import { queryKeys } from "@/lib/queryKeys";
 

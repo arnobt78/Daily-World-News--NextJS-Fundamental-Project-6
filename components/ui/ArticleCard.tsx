@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * ArticleCard - Single article: image, title, source badge, bookmark button.
+ * Staggered animation by index. isHeadline=true for larger layout.
+ * Bookmark button stops propagation so card click opens modal.
+ */
 import { motion } from "framer-motion";
 import { Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +59,7 @@ export default function ArticleCard({
       <button
         type="button"
         onClick={(e) => {
-          e.stopPropagation();
+          e.stopPropagation(); /* Prevent opening modal when bookmarking */
           toggleBookmark(article.url, article);
         }}
         className="absolute top-3 right-3 p-2 sm:p-2.5 rounded-lg bg-black/50 text-white/80 hover:bg-black/70 hover:text-white transition-colors z-10"

@@ -1,6 +1,10 @@
 "use client";
 
-/** Main news section: CSR for category switching, uses SSR initial data for "general" */
+/**
+ * NewsSection - Main home layout: header, category sidebar, article grid, footer.
+ * Uses useNews for headlines; passes SSR initialArticles when category is "general".
+ * Layout: fixed header, sticky sidebar, scrollable main with footer at bottom.
+ */
 import { useState } from "react";
 import type { Article } from "@/types/news";
 import type { NewsCategory } from "@/data/categories";
@@ -10,6 +14,7 @@ import NewsNavbar from "./NewsNavbar";
 import NewsGrid from "./NewsGrid";
 import NewsModal from "./NewsModal";
 import PageHeader from "./ui/PageHeader";
+import Footer from "./ui/Footer";
 import AnimatedSection from "./ui/AnimatedSection";
 import NewsGridSkeleton from "./ui/NewsGridSkeleton";
 
@@ -26,7 +31,7 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
 
   const { headline, news, loading, error } = useNews(
     selectedCategory,
-    selectedCategory === "general" ? initialArticles : undefined,
+    selectedCategory === "general" ? initialArticles : undefined, /* SSR data only for general */
     {
       country: filters.country || undefined,
       lang: filters.lang || undefined,
@@ -40,62 +45,61 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
   };
 
   return (
-    <div className="w-full min-w-0">
-      <div className="w-full min-h-screen bg-[#060709] flex flex-col gap-4 shadow-2xl rounded-2xl overflow-hidden">
-        <header className="w-full bg-[#111214] border-b border-[#222]">
+    <div className="w-full min-w-0 h-screen flex flex-col overflow-hidden">
+      <div className="w-full h-full bg-[#060709] flex flex-col shadow-2xl rounded-2xl overflow-hidden">
+        <header className="w-full bg-[#111214] border-b border-[#222] shrink-0">
           <PageHeader />
         </header>
 
-        <div className="flex gap-4 flex-1 min-h-0 px-2 sm:px-4 pb-8 max-[900px]:flex-col max-[900px]:gap-6">
+        <div className="flex gap-4 flex-1 min-h-0 px-2 sm:px-4 pt-4 pb-8 max-[900px]:flex-col max-[900px]:gap-6">
           <NewsNavbar
             selectedCategory={selectedCategory}
             onCategoryClick={setSelectedCategory}
           />
 
-          <AnimatedSection
-            delay={0.1}
-            direction="up"
-            className="flex-1 min-w-0 min-h-0 flex flex-col"
-          >
-            {error ? (
-              <div className="flex flex-col items-center justify-center h-64 text-[#ddd] gap-4">
-                <p className="text-red-400">{error}</p>
-                <p className="text-sm font-outfit">
-                  Check GNEWS_API_KEY in Vercel env vars.
-                </p>
-              </div>
-            ) : loading && !headline && news.length === 0 ? (
-              <>
-                <NewsGridSkeleton isHeadline />
-                <NewsGridSkeleton count={6} />
-              </>
-            ) : (
-              <>
-                {headline && (
-                  <div className="mb-4">
-                    <NewsGrid
-                      articles={[headline]}
-                      onArticleClick={handleArticleClick}
-                      isHeadline
-                    />
-                  </div>
-                )}
-                <NewsGrid articles={news} onArticleClick={handleArticleClick} />
-              </>
-            )}
-          </AnimatedSection>
-        </div>
+          <main className="flex-1 min-w-0 overflow-y-auto scrollbar-custom flex flex-col min-h-0">
+            <AnimatedSection
+              delay={0.1}
+              direction="up"
+              className="flex flex-col flex-1 min-h-0"
+            >
+              {error ? (
+                <div className="flex flex-col items-center justify-center h-64 text-white/80 gap-4">
+                  <p className="text-red-400">{error}</p>
+                  <p className="text-sm font-outfit">
+                    Check GNEWS_API_KEY in Vercel env vars.
+                  </p>
+                </div>
+              ) : loading && !headline && news.length === 0 ? (
+                /* Skeleton while fetching; matches ArticleCard layout */
+                <>
+                  <NewsGridSkeleton isHeadline />
+                  <NewsGridSkeleton count={6} />
+                </>
+              ) : (
+                <>
+                  {headline && (
+                    <div className="mb-4">
+                      <NewsGrid
+                        articles={[headline]}
+                        onArticleClick={handleArticleClick}
+                        isHeadline
+                      />
+                    </div>
+                  )}
+                  <NewsGrid
+                    articles={news}
+                    onArticleClick={handleArticleClick}
+                  />
+                </>
+              )}
+            </AnimatedSection>
 
-        <footer className="w-full min-h-20 flex items-center justify-between px-2 sm:px-4 bg-[#111214] max-[500px]:min-h-32 max-[500px]:flex-col max-[500px]:justify-center max-[500px]:gap-4 max-[500px]:py-4">
-          <p className="text-sm sm:text-base md:text-lg font-light text-[#bbb] font-outfit">
-            <span className="font-playfair text-xl sm:text-2xl md:text-3xl">
-              News World
-            </span>
-          </p>
-          <p className="text-sm sm:text-base md:text-lg font-light text-[#bbb] font-outfit">
-            &copy; {new Date().getFullYear()}. All reserved.
-          </p>
-        </footer>
+            <div className="mt-auto shrink-0 pt-4">
+              <Footer />
+            </div>
+          </main>
+        </div>
 
         <NewsModal
           show={showModal}

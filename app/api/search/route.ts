@@ -1,7 +1,10 @@
+/**
+ * API Route: GET /api/search
+ * Proxies GNews search API. Requires query param "q". Keeps API key server-side.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { fetchSearch } from "@/lib/gnews";
 
-/** API route: proxies GNews search to avoid CORS */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const q = searchParams.get("q") ?? "";
@@ -13,6 +16,7 @@ export async function GET(request: NextRequest) {
   const to = searchParams.get("to") ?? undefined;
   const sortby = searchParams.get("sortby") as "publishedAt" | "relevance" | undefined;
 
+  /* Search requires a non-empty query */
   if (!q.trim()) {
     return NextResponse.json(
       { error: "Query parameter 'q' is required" },

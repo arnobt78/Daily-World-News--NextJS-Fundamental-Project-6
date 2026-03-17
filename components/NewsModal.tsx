@@ -1,13 +1,17 @@
 "use client";
 
-/** Modal overlay for article detail; client-only for interactivity */
+/**
+ * NewsModal - Full article view overlay. Share (Web Share API or clipboard),
+ * Bookmark, Read More link. AnimatePresence for enter/exit animations.
+ * Click backdrop to close; stopPropagation on content.
+ */
 import { AnimatePresence, motion } from "framer-motion";
-import { Share2, Bookmark } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Share2, Bookmark, X } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useBookmarks } from "@/context/BookmarkContext";
 import type { Article } from "@/types/news";
+import Image from "next/image";
 
 const NO_IMG = "/images/no-img.png";
 
@@ -54,40 +58,40 @@ export default function NewsModal({ show, article, onClose }: NewsModalProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="w-full max-h-[90vh] bg-[#111214] p-4 rounded-xl shadow-2xl relative overflow-y-auto"
+            className="w-full max-w-7xl max-h-[90vh] bg-[#111214] rounded-xl shadow-2xl relative overflow-y-auto scrollbar-custom"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
-              onClick={onClose}
-              className="absolute top-4 right-6 text-2xl text-white cursor-pointer hover:text-[#b88efc] transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              className="absolute top-4 right-4 z-20 p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="Close modal"
             >
-              <i className="fa-solid fa-xmark" />
+              <X className="size-6 cursor-pointer" />
             </button>
             {article && (
               <Card className="border-0 bg-transparent shadow-none">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={article.image ?? NO_IMG}
                   alt={article.title}
+                  width={1000}
+                  height={1000}
+                  unoptimized /* External URLs may not be in next.config images.domains */
                   onError={(e) => {
                     e.currentTarget.src = NO_IMG;
                   }}
-                  className="w-full h-auto max-h-[30rem] object-cover rounded-xl opacity-80"
+                  className="w-full h-auto max-h-[30rem] object-cover rounded-t-xl opacity-80"
                 />
-                <CardHeader className="px-0 pt-6">
+                <div className="px-6 py-6">
                   <h2 className="font-playfair text-2xl sm:text-3xl text-white tracking-wider">
                     {article.title}
                   </h2>
-                  <div className="flex flex-wrap gap-2 mt-4 items-center">
-                    <Badge
-                      variant="secondary"
-                      className="bg-[#222] text-[#bbb]"
-                    >
-                      {article.source.name}
-                    </Badge>
-                    <span className="font-outfit text-sm text-[#bbb]">
+                  <div className="flex flex-wrap gap-2 mt-3 items-center font-outfit text-sm text-[#bbb]">
+                    <span className="font-medium">{article.source.name}</span>
+                    <span>
                       {new Date(article.publishedAt).toLocaleString("en-US", {
                         month: "short",
                         day: "2-digit",
@@ -96,43 +100,41 @@ export default function NewsModal({ show, article, onClose }: NewsModalProps) {
                         minute: "2-digit",
                       })}
                     </span>
-                    <div className="flex gap-2 ml-auto">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="bg-[#222] text-[#bbb] hover:bg-[#333] hover:text-white"
-                        onClick={() => handleShare(article)}
-                      >
-                        <Share2 className="size-4 mr-1" />
-                        Share
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className={`bg-[#222] text-[#bbb] hover:bg-[#333] hover:text-white ${isBookmarked(article.url) ? "text-[#b88efc]" : ""}`}
-                        onClick={() => toggleBookmark(article.url, article)}
-                      >
-                        <Bookmark
-                          className={`size-4 mr-1 ${isBookmarked(article.url) ? "fill-current" : ""}`}
-                        />
-                        {isBookmarked(article.url) ? "Saved" : "Bookmark"}
-                      </Button>
-                    </div>
                   </div>
-                </CardHeader>
-                <CardContent className="px-0">
-                  <p className="text-base text-[#ddd] leading-relaxed font-outfit">
-                    {article.content}
+                  <p className="mt-4 text-base text-[#ddd] leading-relaxed font-outfit">
+                    {article.content || article.description || ""}
                   </p>
+                  <div className="flex flex-wrap gap-2 mt-6 items-center">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="bg-[#222] text-[#bbb] hover:bg-[#333] hover:text-white"
+                      onClick={() => handleShare(article)}
+                    >
+                      <Share2 className="size-4 mr-1" />
+                      Share
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className={`bg-[#222] text-[#bbb] hover:bg-[#333] hover:text-white ${isBookmarked(article.url) ? "text-[#b88efc]" : ""}`}
+                      onClick={() => toggleBookmark(article.url, article)}
+                    >
+                      <Bookmark
+                        className={`size-4 mr-1 ${isBookmarked(article.url) ? "fill-current" : ""}`}
+                      />
+                      {isBookmarked(article.url) ? "Saved" : "Bookmark"}
+                    </Button>
+                  </div>
                   <a
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block mt-8 py-4 px-8 bg-gradient-to-r from-[#b88efc] to-[#6877f4] text-white text-center text-base uppercase rounded-[5rem] font-outfit hover:opacity-90 active:translate-y-0.5 transition-all"
+                    className="inline-block mt-6 py-4 px-8 bg-gradient-to-r from-[#b88efc] to-[#6877f4] text-white text-center text-base uppercase rounded-[5rem] font-outfit hover:opacity-90 active:translate-y-0.5 transition-all"
                   >
                     Read More
                   </a>
-                </CardContent>
+                </div>
               </Card>
             )}
           </motion.div>

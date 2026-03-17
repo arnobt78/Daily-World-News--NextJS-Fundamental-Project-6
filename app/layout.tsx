@@ -1,3 +1,7 @@
+/**
+ * Root Layout - Wraps all pages with providers, fonts, and SEO metadata.
+ * This is a Server Component by default; children may be client components.
+ */
 import type { Metadata } from "next";
 import { Playfair_Display, Outfit, Geist } from "next/font/google";
 import "./globals.css";
@@ -7,6 +11,7 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 import { InvalidationProvider } from "@/components/providers/InvalidationProvider";
 import { cn } from "@/lib/utils";
 
+/* Google Fonts - loaded at build time, exposed as CSS variables for Tailwind */
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const playfair = Playfair_Display({
@@ -22,8 +27,51 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "News World",
-  description: "World news headlines",
+  metadataBase: new URL("https://daily-world-news.vercel.app"),
+  title: {
+    default: "News World | Daily World News, Headlines & Search",
+    template: "%s | News World",
+  },
+  description:
+    "News World delivers the latest world news, headlines, and articles from thousands of sources. Browse by category, search keywords, and save bookmarks. Built with Next.js and GNews API.",
+  keywords: [
+    "news",
+    "world news",
+    "headlines",
+    "daily news",
+    "GNews API",
+    "Next.js",
+    "React",
+    "news search",
+    "bookmarks",
+  ],
+  authors: [
+    {
+      name: "Arnob Mahmud",
+      url: "https://www.arnobmahmud.com",
+    },
+  ],
+  creator: "Arnob Mahmud",
+  publisher: "Arnob Mahmud",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://daily-world-news.vercel.app",
+    siteName: "News World",
+    title: "News World | Daily World News, Headlines & Search",
+    description:
+      "News World delivers the latest world news, headlines, and articles from thousands of sources. Browse by category, search keywords, and save bookmarks.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "News World | Daily World News, Headlines & Search",
+    description:
+      "News World delivers the latest world news, headlines, and articles from thousands of sources.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -43,12 +91,14 @@ export default function RootLayout({
       className={cn(playfair.variable, outfit.variable, geist.variable)}
     >
       <head>
+        <meta name="author" content="Arnob Mahmud (contact@arnobmahmud.com)" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         />
       </head>
-      <body className="font-outfit antialiased" suppressHydrationWarning>
+      <body className="font-outfit antialiased scrollbar-custom bg-[#060709] min-h-screen" suppressHydrationWarning>
+        {/* Provider chain: QueryProvider (React Query) → InvalidationProvider → BookmarkProvider → NewsProvider */}
         <QueryProvider>
           <InvalidationProvider>
             <BookmarkProvider>

@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * useSearch - Fetches search results via React Query.
+ * Only runs when query is non-empty (enabled: !!query.trim()).
+ * Page state is local; changing it triggers a new fetch.
+ */
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSearchClient } from "@/lib/api";
@@ -31,7 +36,7 @@ export function useSearch(query: string, params?: UseSearchParams) {
         max: params?.max,
         sortby: params?.sortby,
       }),
-    enabled: !!query.trim(),
+    enabled: !!query.trim(), /* No fetch when search is empty */
   });
 
   const setPage = useCallback((p: number) => {

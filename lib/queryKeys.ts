@@ -1,3 +1,7 @@
+/**
+ * React Query key factory. Keys include params so cache is per-category/filter.
+ * Invalidating .all refetches all headlines or search queries.
+ */
 export const queryKeys = {
   headlines: {
     all: ["headlines"] as const,

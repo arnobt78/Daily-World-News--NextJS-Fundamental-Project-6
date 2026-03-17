@@ -1,7 +1,11 @@
+/**
+ * API Route: GET /api/headlines
+ * Proxies GNews top-headlines API. Keeps API key server-side and avoids CORS.
+ * Client fetches from /api/headlines instead of gnews.io directly.
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { fetchHeadlines } from "@/lib/gnews";
 
-/** API route: proxies GNews to avoid CORS when fetching from client */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const category = searchParams.get("category") ?? "general";
@@ -11,6 +15,7 @@ export async function GET(request: NextRequest) {
   const pageParam = searchParams.get("page");
 
   try {
+    /* Forward params to GNews; lib/gnews.ts adds API key server-side */
     const data = await fetchHeadlines(category, {
       lang: lang || undefined,
       country: country || undefined,

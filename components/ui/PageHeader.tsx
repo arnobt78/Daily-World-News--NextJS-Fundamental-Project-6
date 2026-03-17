@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * PageHeader - Navbar: logo, country/lang filters, refresh, theme toggle, nav links.
+ * Used on all pages. Filters from NewsContext; refresh from useRefreshNews.
+ */
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { RefreshCw, Globe } from "lucide-react";
@@ -76,11 +80,18 @@ export default function PageHeader() {
         >
           Home
         </Link>
+
         <Link
           href="/search"
           className="font-outfit text-sm sm:text-base md:text-lg text-white/80 hover:text-white transition-colors"
         >
           Search
+        </Link>
+        <Link
+          href="/bookmarks"
+          className="font-outfit text-sm sm:text-base md:text-lg text-white/80 hover:text-white transition-colors"
+        >
+          Bookmarks
         </Link>
         <Link
           href="/about"

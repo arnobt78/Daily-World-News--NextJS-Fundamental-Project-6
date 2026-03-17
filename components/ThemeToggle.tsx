@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * ThemeToggle - Light/dark mode. Persists in localStorage.
+ * useSyncExternalStore for SSR-safe theme read. Applies .dark on html.
+ */
 import { useSyncExternalStore, useCallback, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +14,7 @@ function getSnapshot(): "light" | "dark" {
   if (typeof window === "undefined") return "dark";
   const stored = localStorage.getItem(THEME_KEY) as "light" | "dark" | null;
   if (stored) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; /* System preference fallback */
 }
 
 const themeListeners = new Set<() => void>();

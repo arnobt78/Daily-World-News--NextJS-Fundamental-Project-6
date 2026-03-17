@@ -1,4 +1,6 @@
-/** GNews API supported language codes */
+/**
+ * GNews API supported language codes. Used in PageHeader filters.
+ */
 export const languages = [
   { code: "en", name: "English" },
   { code: "es", name: "Spanish" },

@@ -1,11 +1,22 @@
+import type { Metadata } from "next";
 import { fetchHeadlines } from "@/lib/gnews";
-import NewsSection from "@/components/NewsSection";
+import HomePage from "@/components/pages/HomePage";
 
 /** Force server-side rendering on every request (no static caching) */
 export const dynamic = "force-dynamic";
 
-/** Home page: SSR fetches initial news, passes to client components for CSR */
-export default async function HomePage() {
+export const metadata: Metadata = {
+  title: "Home",
+  description:
+    "Browse the latest world news headlines by category. General, World, Business, Technology, Sports, Science, Health, and more.",
+};
+
+/**
+ * Home page: SSR fetches initial news, passes to client components for CSR.
+ * This runs on the server on every request (force-dynamic). Initial data is
+ * passed to HomePage to avoid loading spinner on first paint for "general" category.
+ */
+export default async function Page() {
   let initialArticles: Awaited<ReturnType<typeof fetchHeadlines>>["articles"] =
     [];
   try {
@@ -15,11 +26,5 @@ export default async function HomePage() {
     // GNEWS_API_KEY not set or API error - will use empty state
   }
 
-  return (
-    <div className="min-h-screen w-full">
-      <div className="max-w-9xl mx-auto w-full">
-        <NewsSection initialArticles={initialArticles} />
-      </div>
-    </div>
-  );
+  return <HomePage initialArticles={initialArticles} />;
 }

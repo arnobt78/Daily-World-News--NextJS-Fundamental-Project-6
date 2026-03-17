@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * useNews - Fetches headlines for a category via React Query.
+ * Uses initialData from SSR when category is "general" to avoid loading flash.
+ * Refetches when category or filters change (queryKey includes them).
+ */
 import { useQuery } from "@tanstack/react-query";
 import type { Article } from "@/types/news";
 import { fetchHeadlinesClient } from "@/lib/api";
@@ -29,6 +34,7 @@ export function useNews(
         lang: params?.lang,
         max: params?.max ?? 10,
       }),
+    /* SSR data for "general" avoids spinner on first load */
     initialData:
       category === "general" && initialArticles && initialArticles.length > 0
         ? {

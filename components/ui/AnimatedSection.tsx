@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * AnimatedSection - Fade + slide animation for content sections.
+ * direction "up" = slide from below; "down" = from above.
+ */
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 

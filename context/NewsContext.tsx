@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * NewsContext - Global country and language filters.
+ * When filters change, we invalidate headlines and search queries
+ * so React Query refetches with new params.
+ */
 import {
   createContext,
   useCallback,
@@ -36,6 +41,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
 
   const setCountry = useCallback((country: CountryCode | "") => {
     setFilters((prev) => ({ ...prev, country }));
+    /* Invalidate so useNews/useSearch refetch with new country */
     queryClient.invalidateQueries({ queryKey: queryKeys.headlines.all });
     queryClient.invalidateQueries({ queryKey: queryKeys.search.all });
   }, [queryClient]);
