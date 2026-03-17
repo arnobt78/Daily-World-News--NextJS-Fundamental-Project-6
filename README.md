@@ -56,6 +56,7 @@ News World is an educational news application that fetches real-time headlines f
 | **Responsive Design**          | Mobile-first layout with Tailwind CSS                                                                         |
 | **Skeleton Loading**           | Animated skeletons while data loads                                                                           |
 | **SEO Metadata**               | Title, description, Open Graph, and Twitter cards for sharing                                                 |
+| **Image Proxy**                | External images served via `/api/image` to avoid ad blocker blocking (ERR_BLOCKED_BY_CLIENT)                 |
 
 ---
 
@@ -81,7 +82,8 @@ News World is an educational news application that fetches real-time headlines f
 news-world/
 ├── app/
 │   ├── api/
-│   │   ├── headlines/route.ts    # GET /api/headlines - Top headlines proxy
+│   │   ├── headlines/route.ts   # GET /api/headlines - Top headlines proxy
+│   │   ├── image/route.ts       # GET /api/image - Image proxy (avoids ad blocker blocking)
 │   │   └── search/route.ts      # GET /api/search - Search proxy
 │   ├── about/page.tsx           # About page
 │   ├── bookmarks/page.tsx       # Bookmarks page
@@ -123,6 +125,7 @@ news-world/
 ├── lib/
 │   ├── gnews.ts                # GNews API fetchers (server-side)
 │   ├── api.ts                  # Client-side fetch wrappers
+│   ├── imageProxy.ts           # getProxiedImageUrl() - proxy external images
 │   ├── queryKeys.ts            # React Query key factory
 │   ├── queryClient.ts          # Query client config
 │   ├── invalidateNews.ts       # Invalidation helpers
@@ -287,6 +290,22 @@ Searches news articles by keyword.
 GET /api/search?q=technology&lang=en&page=1
 ```
 
+### GET `/api/image`
+
+Proxies external images through our domain. Avoids `ERR_BLOCKED_BY_CLIENT` when ad blockers block third-party media (e.g. CNN, BBC CDNs). Uses `getProxiedImageUrl()` in ArticleCard and NewsModal. Fallback to placeholder on error.
+
+**Query parameters:**
+
+| Param | Type   | Required | Description                    |
+| ----- | ------ | -------- | ------------------------------ |
+| `url` | string | Yes      | Full URL of the image to fetch |
+
+**Example:**
+
+```bash
+GET /api/image?url=https://media.cnn.com/.../image.jpg
+```
+
 ---
 
 ## Components & Architecture
@@ -448,7 +467,7 @@ Use in other projects by copying the hooks and ensuring `/api/headlines` and `/a
 
 ## Keywords
 
-Next.js 16, React 19, TypeScript, Tailwind CSS, GNews API, News App, SSR, API Routes, React Query, TanStack Query, Context API, localStorage, Bookmarks, Responsive Design, Framer Motion, Components, Frontend, Web Development, Educational Project
+Next.js 16, React 19, TypeScript, Tailwind CSS, GNews API, News App, SSR, API Routes, Image Proxy, React Query, TanStack Query, Context API, localStorage, Bookmarks, Responsive Design, Framer Motion, Components, Frontend, Web Development, Educational Project
 
 ---
 
@@ -458,7 +477,7 @@ News World is a practical example of a modern full-stack React application. It c
 
 - **Server-side rendering** for fast initial load
 - **Client-side fetching** for category switching and search
-- **API routes** as a secure backend proxy
+- **API routes** as a secure backend proxy (headlines, search, image proxy)
 - **React Query** for caching and invalidation
 - **Context** for filters and bookmarks
 - **localStorage** for persistence

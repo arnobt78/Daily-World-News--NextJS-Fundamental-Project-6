@@ -10,6 +10,7 @@ import { Share2, Bookmark, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useBookmarks } from "@/context/BookmarkContext";
+import { getProxiedImageUrl } from "@/lib/imageProxy";
 import type { Article } from "@/types/news";
 import Image from "next/image";
 
@@ -75,11 +76,11 @@ export default function NewsModal({ show, article, onClose }: NewsModalProps) {
             {article && (
               <Card className="border-0 bg-transparent shadow-none">
                 <Image
-                  src={article.image ?? NO_IMG}
+                  src={getProxiedImageUrl(article.image)}
                   alt={article.title}
                   width={1000}
                   height={1000}
-                  unoptimized /* External URLs may not be in next.config images.domains */
+                  unoptimized
                   onError={(e) => {
                     e.currentTarget.src = NO_IMG;
                   }}

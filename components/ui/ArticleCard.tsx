@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useBookmarks } from "@/context/BookmarkContext";
+import { getProxiedImageUrl } from "@/lib/imageProxy";
 import type { Article } from "@/types/news";
 
 const NO_IMG = "/images/no-img.png";
@@ -48,7 +49,7 @@ export default function ArticleCard({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={article.image ?? NO_IMG}
+        src={getProxiedImageUrl(article.image)}
         alt={article.title}
         suppressHydrationWarning
         onError={(e) => {
