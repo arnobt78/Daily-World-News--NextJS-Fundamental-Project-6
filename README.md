@@ -11,7 +11,10 @@ A modern, full-featured news application that delivers live world headlines from
 
 - **Live Demo:** [https://daily-world-news.vercel.app/](https://daily-world-news.vercel.app/)
 
----
+![Image 1](https://github.com/user-attachments/assets/9c87e0f5-e48b-4a1f-99a4-1078e3ba8820)
+![Image 2](https://github.com/user-attachments/assets/6a9d4e16-15d6-4974-8535-595ea031343b)
+![Image 3](https://github.com/user-attachments/assets/8ce7d6e7-8c70-4d4b-9e68-be0b7a517cf8)
+![Image 4](https://github.com/user-attachments/assets/e9d8453a-2908-4245-9864-90ecea886123)
 
 ## Table of Contents
 
@@ -45,22 +48,22 @@ News World is an educational news application that fetches real-time headlines f
 
 ## Features
 
-| Feature                        | Description                                                                                                   |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **Category Headlines**         | Browse news by category: General, World, Business, Technology, Entertainment, Sports, Science, Health, Nation |
-| **Hero & Headlines Reel**      | Hero banner (responsive height) and infinite auto-scrolling film reel of articles on the home page          |
-| **Keyword Search**            | Search across 80,000+ sources with "Search in", date range (From/To), and pagination; centered layout        |
-| **Bookmarks**                  | Save articles; counter badge in navbar; full article data stored; same badges as Home; centered empty state   |
-| **Country & Language Filters** | Filter headlines and search by 20+ countries and 15+ languages (NewsContext, shared across Home & Search)    |
+| Feature                        | Description                                                                                                      |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| **Category Headlines**         | Browse news by category: General, World, Business, Technology, Entertainment, Sports, Science, Health, Nation    |
+| **Hero & Headlines Reel**      | Hero banner (responsive height) and infinite auto-scrolling film reel of articles on the home page               |
+| **Keyword Search**             | Search across 80,000+ sources with "Search in", date range (From/To), and pagination; centered layout            |
+| **Bookmarks**                  | Save articles; counter badge in navbar; full article data stored; same badges as Home; centered empty state      |
+| **Country & Language Filters** | Filter headlines and search by 20+ countries and 15+ languages (NewsContext, shared across Home & Search)        |
 | **Article Modal**              | Shadcn Dialog (90vw×90vh), theme-aware; source/date/lang/country badges; single body; Share, Bookmark, Read More |
-| **Refresh**                    | Manually refresh headlines with a loading indicator                                                            |
-| **Theme Toggle**               | Light/dark mode; consistent theme-aware UI; scrollbars and inputs adapt                                       |
-| **Responsive Design**          | Mobile-first; Search/Bookmarks/About centered (max-w-7xl); Navbar border inset (mx-4)                        |
-| **Skeleton Loading**          | Animated skeletons; hero/reel use mounted guard to avoid hydration mismatch                                   |
-| **SEO Metadata**               | Title, description, author, Open Graph, Twitter cards                                                         |
-| **Image Proxy**                | First-party `/api/image`; 4xx/5xx → placeholder; avoids ad blocker blocking                                   |
-| **Category Icons**             | Lucide icons next to each category in the sidebar                                                             |
-| **Unified Data Flow**          | Same Article shape and NewsModal on Home, Search, Bookmarks; single hooks/context pattern                    |
+| **Refresh**                    | Manually refresh headlines with a loading indicator                                                              |
+| **Theme Toggle**               | Light/dark mode; consistent theme-aware UI; scrollbars and inputs adapt                                          |
+| **Responsive Design**          | Mobile-first; Search/Bookmarks/About centered (max-w-7xl); Navbar border inset (mx-4)                            |
+| **Skeleton Loading**           | Animated skeletons; hero/reel use mounted guard to avoid hydration mismatch                                      |
+| **SEO Metadata**               | Title, description, author, Open Graph, Twitter cards                                                            |
+| **Image Proxy**                | First-party `/api/image`; 4xx/5xx → placeholder; avoids ad blocker blocking                                      |
+| **Category Icons**             | Lucide icons next to each category in the sidebar                                                                |
+| **Unified Data Flow**          | Same Article shape and NewsModal on Home, Search, Bookmarks; single hooks/context pattern                        |
 
 ---
 
@@ -284,19 +287,19 @@ Searches news articles by keyword.
 
 **Query parameters:**
 
-| Param     | Type   | Required | Description                       |
-| --------- | ------ | -------- | --------------------------------- |
-| `q`       | string | Yes      | Search query                      |
-| `country` | string | No       | Country filter                    |
-| `lang`    | string | No       | Language filter                   |
-| `max`     | number | No       | Max results                       |
-| `page`    | number | No       | Page number                       |
-| `sortby`  | string | No       | `publishedAt` or `relevance`      |
-| `in`      | string | No       | Search in: title, description, content, or comma-separated |
-| `from`    | string | No       | Start date (ISO)                  |
-| `to`      | string | No       | End date (ISO)                    |
-| `nullable`| string | No       | Optional GNews param             |
-| `truncate`| string | No       | `content` to truncate             |
+| Param      | Type   | Required | Description                                                |
+| ---------- | ------ | -------- | ---------------------------------------------------------- |
+| `q`        | string | Yes      | Search query                                               |
+| `country`  | string | No       | Country filter                                             |
+| `lang`     | string | No       | Language filter                                            |
+| `max`      | number | No       | Max results                                                |
+| `page`     | number | No       | Page number                                                |
+| `sortby`   | string | No       | `publishedAt` or `relevance`                               |
+| `in`       | string | No       | Search in: title, description, content, or comma-separated |
+| `from`     | string | No       | Start date (ISO)                                           |
+| `to`       | string | No       | End date (ISO)                                             |
+| `nullable` | string | No       | Optional GNews param                                       |
+| `truncate` | string | No       | `content` to truncate                                      |
 
 **Example:**
 
